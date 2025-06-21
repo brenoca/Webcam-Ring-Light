@@ -7,16 +7,29 @@
     
 import SwiftUI
 
-// Version2 Old UI bar with slider
-
 @main
 struct LightRingApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
-        Settings { }  // Empty settings scene
+        // We need to return something, but we'll make it invisible
+        WindowGroup {
+            EmptyView()
+        }
+        .defaultSize(width: 0, height: 0)
     }
 }
+
+// Version2 Old UI bar with slider
+
+//@main
+//struct LightRingApp: App {
+//    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+//    
+//    var body: some Scene {
+//        Settings { }  // Empty settings scene
+//    }
+//}
 
 // First Working version
 

@@ -9,42 +9,95 @@
 
 import SwiftUI
 
+//struct MenuBarView: View {
+//    @ObservedObject var windowManager: WindowManager
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 12) {
+//            Text("Ring Controls")
+//                .font(.headline)
+//                .padding()
+//            
+//            VStack(alignment: .leading) {
+//                Text("Size: \(Int(windowManager.radiusPercentage))%")
+//                Slider(
+//                    value: $windowManager.radiusPercentage,
+//                    in: 50...150,
+//                    step: 10
+//                )
+//            }
+//            .padding()
+//            
+//            VStack(alignment: .leading) {
+//                Text("Width: \(String(format: "%.1f", windowManager.borderPercentage))%")
+//                Slider(
+//                    value: $windowManager.borderPercentage,
+//                    in: 5...50,
+//                    step: 5
+//                )
+//            }
+//            .padding()
+//            
+//            Toggle("Show Ring", isOn: $windowManager.isVisible)
+//                .padding()
+//            
+//            Button("Quit") {
+//                NSApplication.shared.terminate(nil)
+//            }.padding()
+//        }
+//    }
+//}
+
 struct MenuBarView: View {
     @ObservedObject var windowManager: WindowManager
+    @State private var showingAccessibilityAlert = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("Ring Controls")
                 .font(.headline)
-                .padding()
+                .padding(.bottom, 4)
             
             VStack(alignment: .leading) {
-                Text("Size: \(Int(windowManager.radiusPercentage))%")
+                Text("Radius: \(Int(windowManager.radiusPercentage))%")
                 Slider(
                     value: $windowManager.radiusPercentage,
                     in: 50...150,
                     step: 10
                 )
             }
-            .padding()
+            .padding(.vertical, 4)
             
             VStack(alignment: .leading) {
-                Text("Width: \(String(format: "%.1f", windowManager.borderPercentage))%")
+                Text("Border: \(String(format: "%.1f", windowManager.borderPercentage))%")
                 Slider(
                     value: $windowManager.borderPercentage,
                     in: 5...50,
                     step: 5
                 )
             }
-            .padding()
+            .padding(.vertical, 4)
             
             Toggle("Show Ring", isOn: $windowManager.isVisible)
-                .padding()
+                .padding(.vertical, 4)
+            
+            Button("Resize Windows to Fit") {
+                    let diameter = max(NSScreen.main?.frame.width ?? 0,
+                                     NSScreen.main?.frame.height ?? 0) *
+                                 (windowManager.radiusPercentage / 100.0)
+                    WindowResizer.resizeWindowsToFitRing(ringDiameter: diameter)
+            }
+            .padding(.vertical, 4)
+            
+            Divider()
+                .padding(.vertical, 4)
             
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
-            }.padding()
+            }
         }
+        .padding(.vertical, 8) // Added vertical padding
+        .frame(width: 280) // Set a consistent width
     }
 }
 
