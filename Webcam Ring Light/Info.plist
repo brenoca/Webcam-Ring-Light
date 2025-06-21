@@ -1,0 +1,5 @@
+// Make sure your Info.plist has these entries:
+/*
+<key>LSUIElement</key>
+<true/>
+*/

@@ -7,13 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		516D7E1E2CD0E9C5008CC3EB /* Webcam_Ring_LightApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E1D2CD0E9C5008CC3EB /* Webcam_Ring_LightApp.swift */; };
-		516D7E202CD0E9C5008CC3EB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E1F2CD0E9C5008CC3EB /* ContentView.swift */; };
+		516D7E1E2CD0E9C5008CC3EB /* LightRingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E1D2CD0E9C5008CC3EB /* LightRingApp.swift */; };
 		516D7E222CD0E9C6008CC3EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 516D7E212CD0E9C6008CC3EB /* Assets.xcassets */; };
 		516D7E252CD0E9C6008CC3EB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 516D7E242CD0E9C6008CC3EB /* Preview Assets.xcassets */; };
-		516D7E302CD0E9C6008CC3EB /* Webcam_Ring_LightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E2F2CD0E9C6008CC3EB /* Webcam_Ring_LightTests.swift */; };
-		516D7E3A2CD0E9C7008CC3EB /* Webcam_Ring_LightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E392CD0E9C7008CC3EB /* Webcam_Ring_LightUITests.swift */; };
-		516D7E3C2CD0E9C7008CC3EB /* Webcam_Ring_LightUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E3B2CD0E9C7008CC3EB /* Webcam_Ring_LightUITestsLaunchTests.swift */; };
+		516D7E302CD0E9C6008CC3EB /* Ring_LightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E2F2CD0E9C6008CC3EB /* Ring_LightTests.swift */; };
+		516D7E3A2CD0E9C7008CC3EB /* Ring_LightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E392CD0E9C7008CC3EB /* Ring_LightUITests.swift */; };
+		516D7E3C2CD0E9C7008CC3EB /* Ring_LightUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E3B2CD0E9C7008CC3EB /* Ring_LightUITestsLaunchTests.swift */; };
+		516D7E492CD0ECF0008CC3EB /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E482CD0ECF0008CC3EB /* MenuBarView.swift */; };
+		516D7E4B2CD0ED16008CC3EB /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E4A2CD0ED16008CC3EB /* WindowManager.swift */; };
+		516D7E532CD0F3B4008CC3EB /* RingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E522CD0F3B4008CC3EB /* RingView.swift */; };
+		516D7E572CD1B054008CC3EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E562CD1B054008CC3EB /* AppDelegate.swift */; };
+		516D7E592CD1B0DD008CC3EB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 516D7E582CD1B0DD008CC3EB /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,17 +38,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		516D7E1A2CD0E9C5008CC3EB /* Webcam Ring Light.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Webcam Ring Light.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		516D7E1D2CD0E9C5008CC3EB /* Webcam_Ring_LightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Webcam_Ring_LightApp.swift; sourceTree = "<group>"; };
-		516D7E1F2CD0E9C5008CC3EB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		516D7E1A2CD0E9C5008CC3EB /* Ring Light.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ring Light.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		516D7E1D2CD0E9C5008CC3EB /* LightRingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRingApp.swift; sourceTree = "<group>"; };
 		516D7E212CD0E9C6008CC3EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		516D7E242CD0E9C6008CC3EB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		516D7E262CD0E9C6008CC3EB /* Webcam_Ring_Light.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Webcam_Ring_Light.entitlements; sourceTree = "<group>"; };
-		516D7E2B2CD0E9C6008CC3EB /* Webcam Ring LightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Webcam Ring LightTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		516D7E2F2CD0E9C6008CC3EB /* Webcam_Ring_LightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Webcam_Ring_LightTests.swift; sourceTree = "<group>"; };
-		516D7E352CD0E9C7008CC3EB /* Webcam Ring LightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Webcam Ring LightUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		516D7E392CD0E9C7008CC3EB /* Webcam_Ring_LightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Webcam_Ring_LightUITests.swift; sourceTree = "<group>"; };
-		516D7E3B2CD0E9C7008CC3EB /* Webcam_Ring_LightUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Webcam_Ring_LightUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		516D7E2B2CD0E9C6008CC3EB /* Ring LightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ring LightTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		516D7E2F2CD0E9C6008CC3EB /* Ring_LightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ring_LightTests.swift; sourceTree = "<group>"; };
+		516D7E352CD0E9C7008CC3EB /* Ring LightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ring LightUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		516D7E392CD0E9C7008CC3EB /* Ring_LightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ring_LightUITests.swift; sourceTree = "<group>"; };
+		516D7E3B2CD0E9C7008CC3EB /* Ring_LightUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ring_LightUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		516D7E482CD0ECF0008CC3EB /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		516D7E4A2CD0ED16008CC3EB /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		516D7E522CD0F3B4008CC3EB /* RingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingView.swift; sourceTree = "<group>"; };
+		516D7E562CD1B054008CC3EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		516D7E582CD1B0DD008CC3EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		516D7E5A2CD26F10008CC3EB /* Ring-Light-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Ring-Light-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,9 +84,10 @@
 		516D7E112CD0E9C5008CC3EB = {
 			isa = PBXGroup;
 			children = (
+				516D7E5A2CD26F10008CC3EB /* Ring-Light-Info.plist */,
 				516D7E1C2CD0E9C5008CC3EB /* Webcam Ring Light */,
-				516D7E2E2CD0E9C6008CC3EB /* Webcam Ring LightTests */,
-				516D7E382CD0E9C7008CC3EB /* Webcam Ring LightUITests */,
+				516D7E2E2CD0E9C6008CC3EB /* Ring LightTests */,
+				516D7E382CD0E9C7008CC3EB /* Ring LightUITests */,
 				516D7E1B2CD0E9C5008CC3EB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,9 +95,9 @@
 		516D7E1B2CD0E9C5008CC3EB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				516D7E1A2CD0E9C5008CC3EB /* Webcam Ring Light.app */,
-				516D7E2B2CD0E9C6008CC3EB /* Webcam Ring LightTests.xctest */,
-				516D7E352CD0E9C7008CC3EB /* Webcam Ring LightUITests.xctest */,
+				516D7E1A2CD0E9C5008CC3EB /* Ring Light.app */,
+				516D7E2B2CD0E9C6008CC3EB /* Ring LightTests.xctest */,
+				516D7E352CD0E9C7008CC3EB /* Ring LightUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,11 +105,15 @@
 		516D7E1C2CD0E9C5008CC3EB /* Webcam Ring Light */ = {
 			isa = PBXGroup;
 			children = (
-				516D7E1D2CD0E9C5008CC3EB /* Webcam_Ring_LightApp.swift */,
-				516D7E1F2CD0E9C5008CC3EB /* ContentView.swift */,
+				516D7E1D2CD0E9C5008CC3EB /* LightRingApp.swift */,
 				516D7E212CD0E9C6008CC3EB /* Assets.xcassets */,
 				516D7E262CD0E9C6008CC3EB /* Webcam_Ring_Light.entitlements */,
 				516D7E232CD0E9C6008CC3EB /* Preview Content */,
+				516D7E482CD0ECF0008CC3EB /* MenuBarView.swift */,
+				516D7E4A2CD0ED16008CC3EB /* WindowManager.swift */,
+				516D7E522CD0F3B4008CC3EB /* RingView.swift */,
+				516D7E562CD1B054008CC3EB /* AppDelegate.swift */,
+				516D7E582CD1B0DD008CC3EB /* Info.plist */,
 			);
 			path = "Webcam Ring Light";
 			sourceTree = "<group>";
@@ -112,29 +126,29 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		516D7E2E2CD0E9C6008CC3EB /* Webcam Ring LightTests */ = {
+		516D7E2E2CD0E9C6008CC3EB /* Ring LightTests */ = {
 			isa = PBXGroup;
 			children = (
-				516D7E2F2CD0E9C6008CC3EB /* Webcam_Ring_LightTests.swift */,
+				516D7E2F2CD0E9C6008CC3EB /* Ring_LightTests.swift */,
 			);
-			path = "Webcam Ring LightTests";
+			path = "Ring LightTests";
 			sourceTree = "<group>";
 		};
-		516D7E382CD0E9C7008CC3EB /* Webcam Ring LightUITests */ = {
+		516D7E382CD0E9C7008CC3EB /* Ring LightUITests */ = {
 			isa = PBXGroup;
 			children = (
-				516D7E392CD0E9C7008CC3EB /* Webcam_Ring_LightUITests.swift */,
-				516D7E3B2CD0E9C7008CC3EB /* Webcam_Ring_LightUITestsLaunchTests.swift */,
+				516D7E392CD0E9C7008CC3EB /* Ring_LightUITests.swift */,
+				516D7E3B2CD0E9C7008CC3EB /* Ring_LightUITestsLaunchTests.swift */,
 			);
-			path = "Webcam Ring LightUITests";
+			path = "Ring LightUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		516D7E192CD0E9C5008CC3EB /* Webcam Ring Light */ = {
+		516D7E192CD0E9C5008CC3EB /* Ring Light */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 516D7E3F2CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Webcam Ring Light" */;
+			buildConfigurationList = 516D7E3F2CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Ring Light" */;
 			buildPhases = (
 				516D7E162CD0E9C5008CC3EB /* Sources */,
 				516D7E172CD0E9C5008CC3EB /* Frameworks */,
@@ -144,14 +158,14 @@
 			);
 			dependencies = (
 			);
-			name = "Webcam Ring Light";
+			name = "Ring Light";
 			productName = "Webcam Ring Light";
-			productReference = 516D7E1A2CD0E9C5008CC3EB /* Webcam Ring Light.app */;
+			productReference = 516D7E1A2CD0E9C5008CC3EB /* Ring Light.app */;
 			productType = "com.apple.product-type.application";
 		};
-		516D7E2A2CD0E9C6008CC3EB /* Webcam Ring LightTests */ = {
+		516D7E2A2CD0E9C6008CC3EB /* Ring LightTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 516D7E422CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Webcam Ring LightTests" */;
+			buildConfigurationList = 516D7E422CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Ring LightTests" */;
 			buildPhases = (
 				516D7E272CD0E9C6008CC3EB /* Sources */,
 				516D7E282CD0E9C6008CC3EB /* Frameworks */,
@@ -162,14 +176,14 @@
 			dependencies = (
 				516D7E2D2CD0E9C6008CC3EB /* PBXTargetDependency */,
 			);
-			name = "Webcam Ring LightTests";
+			name = "Ring LightTests";
 			productName = "Webcam Ring LightTests";
-			productReference = 516D7E2B2CD0E9C6008CC3EB /* Webcam Ring LightTests.xctest */;
+			productReference = 516D7E2B2CD0E9C6008CC3EB /* Ring LightTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		516D7E342CD0E9C7008CC3EB /* Webcam Ring LightUITests */ = {
+		516D7E342CD0E9C7008CC3EB /* Ring LightUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 516D7E452CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Webcam Ring LightUITests" */;
+			buildConfigurationList = 516D7E452CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Ring LightUITests" */;
 			buildPhases = (
 				516D7E312CD0E9C7008CC3EB /* Sources */,
 				516D7E322CD0E9C7008CC3EB /* Frameworks */,
@@ -180,9 +194,9 @@
 			dependencies = (
 				516D7E372CD0E9C7008CC3EB /* PBXTargetDependency */,
 			);
-			name = "Webcam Ring LightUITests";
+			name = "Ring LightUITests";
 			productName = "Webcam Ring LightUITests";
-			productReference = 516D7E352CD0E9C7008CC3EB /* Webcam Ring LightUITests.xctest */;
+			productReference = 516D7E352CD0E9C7008CC3EB /* Ring LightUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -208,7 +222,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 516D7E152CD0E9C5008CC3EB /* Build configuration list for PBXProject "Webcam Ring Light" */;
+			buildConfigurationList = 516D7E152CD0E9C5008CC3EB /* Build configuration list for PBXProject "Ring Light" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -221,9 +235,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				516D7E192CD0E9C5008CC3EB /* Webcam Ring Light */,
-				516D7E2A2CD0E9C6008CC3EB /* Webcam Ring LightTests */,
-				516D7E342CD0E9C7008CC3EB /* Webcam Ring LightUITests */,
+				516D7E192CD0E9C5008CC3EB /* Ring Light */,
+				516D7E2A2CD0E9C6008CC3EB /* Ring LightTests */,
+				516D7E342CD0E9C7008CC3EB /* Ring LightUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -235,6 +249,7 @@
 			files = (
 				516D7E252CD0E9C6008CC3EB /* Preview Assets.xcassets in Resources */,
 				516D7E222CD0E9C6008CC3EB /* Assets.xcassets in Resources */,
+				516D7E592CD1B0DD008CC3EB /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,8 +274,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				516D7E202CD0E9C5008CC3EB /* ContentView.swift in Sources */,
-				516D7E1E2CD0E9C5008CC3EB /* Webcam_Ring_LightApp.swift in Sources */,
+				516D7E532CD0F3B4008CC3EB /* RingView.swift in Sources */,
+				516D7E492CD0ECF0008CC3EB /* MenuBarView.swift in Sources */,
+				516D7E4B2CD0ED16008CC3EB /* WindowManager.swift in Sources */,
+				516D7E572CD1B054008CC3EB /* AppDelegate.swift in Sources */,
+				516D7E1E2CD0E9C5008CC3EB /* LightRingApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				516D7E302CD0E9C6008CC3EB /* Webcam_Ring_LightTests.swift in Sources */,
+				516D7E302CD0E9C6008CC3EB /* Ring_LightTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,8 +294,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				516D7E3C2CD0E9C7008CC3EB /* Webcam_Ring_LightUITestsLaunchTests.swift in Sources */,
-				516D7E3A2CD0E9C7008CC3EB /* Webcam_Ring_LightUITests.swift in Sources */,
+				516D7E3C2CD0E9C7008CC3EB /* Ring_LightUITestsLaunchTests.swift in Sources */,
+				516D7E3A2CD0E9C7008CC3EB /* Ring_LightUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,12 +304,12 @@
 /* Begin PBXTargetDependency section */
 		516D7E2D2CD0E9C6008CC3EB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 516D7E192CD0E9C5008CC3EB /* Webcam Ring Light */;
+			target = 516D7E192CD0E9C5008CC3EB /* Ring Light */;
 			targetProxy = 516D7E2C2CD0E9C6008CC3EB /* PBXContainerItemProxy */;
 		};
 		516D7E372CD0E9C7008CC3EB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 516D7E192CD0E9C5008CC3EB /* Webcam Ring Light */;
+			target = 516D7E192CD0E9C5008CC3EB /* Ring Light */;
 			targetProxy = 516D7E362CD0E9C7008CC3EB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -420,20 +438,27 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Webcam Ring Light/Webcam_Ring_Light.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Webcam Ring Light/Preview Content\"";
+				DEVELOPMENT_TEAM = 8WT56MCXFW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Ring-Light-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Ring Light";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Light-Co.Webcam-Ring-Light";
+				PRODUCT_BUNDLE_IDENTIFIER = "Light-Co.Ring-Light";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -445,20 +470,27 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Webcam Ring Light/Webcam_Ring_Light.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Webcam Ring Light/Preview Content\"";
+				DEVELOPMENT_TEAM = 8WT56MCXFW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Ring-Light-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Ring Light";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Light-Co.Webcam-Ring-Light";
+				PRODUCT_BUNDLE_IDENTIFIER = "Light-Co.Ring-Light";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -479,7 +511,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Webcam Ring Light.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Webcam Ring Light";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ring Light.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ring Light";
 			};
 			name = Debug;
 		};
@@ -497,7 +529,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Webcam Ring Light.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Webcam Ring Light";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ring Light.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ring Light";
 			};
 			name = Release;
 		};
@@ -536,7 +568,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		516D7E152CD0E9C5008CC3EB /* Build configuration list for PBXProject "Webcam Ring Light" */ = {
+		516D7E152CD0E9C5008CC3EB /* Build configuration list for PBXProject "Ring Light" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				516D7E3D2CD0E9C7008CC3EB /* Debug */,
@@ -545,7 +577,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		516D7E3F2CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Webcam Ring Light" */ = {
+		516D7E3F2CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Ring Light" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				516D7E402CD0E9C7008CC3EB /* Debug */,
@@ -554,7 +586,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		516D7E422CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Webcam Ring LightTests" */ = {
+		516D7E422CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Ring LightTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				516D7E432CD0E9C7008CC3EB /* Debug */,
@@ -563,7 +595,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		516D7E452CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Webcam Ring LightUITests" */ = {
+		516D7E452CD0E9C7008CC3EB /* Build configuration list for PBXNativeTarget "Ring LightUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				516D7E462CD0E9C7008CC3EB /* Debug */,
