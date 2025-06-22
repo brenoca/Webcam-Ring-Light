@@ -78,6 +78,16 @@ struct MenuBarView: View {
             }
             .padding(.vertical, 4)
             
+            VStack(alignment: .leading) {
+                Text("Transparency: \(Int(windowManager.transparencyPercentage))%")
+                Slider(
+                    value: $windowManager.transparencyPercentage,
+                    in: 0...50,
+                    step: 5
+                )
+            }
+            .padding(.vertical, 4)
+            
             Toggle("Show Ring", isOn: $windowManager.isVisible)
                 .padding(.vertical, 4)
             

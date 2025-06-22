@@ -21,6 +21,7 @@ class OverlayWindow: NSWindow {
 class WindowManager: ObservableObject {
     @Published var radiusPercentage: Double = 100 // Start at 100%
     @Published var borderPercentage: Double = 10 // Start at 10% of screen size
+    @Published var transparencyPercentage: Double = 0 // Start at 0% transparency
     @Published var isVisible: Bool = true {
         didSet {
             if isVisible {

@@ -18,7 +18,6 @@
 		516D7E532CD0F3B4008CC3EB /* RingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E522CD0F3B4008CC3EB /* RingView.swift */; };
 		516D7E572CD1B054008CC3EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D7E562CD1B054008CC3EB /* AppDelegate.swift */; };
 		516D7E592CD1B0DD008CC3EB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 516D7E582CD1B0DD008CC3EB /* Info.plist */; };
-		51D2AD522CFDDF5F00C92BB6 /* WindowResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2AD512CFDDF5B00C92BB6 /* WindowResizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +54,6 @@
 		516D7E562CD1B054008CC3EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		516D7E582CD1B0DD008CC3EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		516D7E5A2CD26F10008CC3EB /* Ring-Light-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Ring-Light-Info.plist"; sourceTree = "<group>"; };
-		51D2AD512CFDDF5B00C92BB6 /* WindowResizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowResizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +105,6 @@
 		516D7E1C2CD0E9C5008CC3EB /* Webcam Ring Light */ = {
 			isa = PBXGroup;
 			children = (
-				51D2AD512CFDDF5B00C92BB6 /* WindowResizer.swift */,
 				516D7E1D2CD0E9C5008CC3EB /* LightRingApp.swift */,
 				516D7E212CD0E9C6008CC3EB /* Assets.xcassets */,
 				516D7E262CD0E9C6008CC3EB /* Webcam_Ring_Light.entitlements */,
@@ -279,7 +276,6 @@
 			files = (
 				516D7E532CD0F3B4008CC3EB /* RingView.swift in Sources */,
 				516D7E492CD0ECF0008CC3EB /* MenuBarView.swift in Sources */,
-				51D2AD522CFDDF5F00C92BB6 /* WindowResizer.swift in Sources */,
 				516D7E4B2CD0ED16008CC3EB /* WindowManager.swift in Sources */,
 				516D7E572CD1B054008CC3EB /* AppDelegate.swift in Sources */,
 				516D7E1E2CD0E9C5008CC3EB /* LightRingApp.swift in Sources */,

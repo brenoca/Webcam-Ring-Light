@@ -21,6 +21,10 @@ struct ObservableRingView: View {
                     get: { self.windowManager.borderPercentage },
                     set: { self.windowManager.borderPercentage = $0 }
                 ),
+                transparencyPercentage: Binding(
+                    get: { self.windowManager.transparencyPercentage },
+                    set: { self.windowManager.transparencyPercentage = $0 }
+                ),
                 screenSize: geometry.size
             )
         }
@@ -31,6 +35,7 @@ struct ObservableRingView: View {
 struct RingView: View {
     @Binding var radiusPercentage: Double
     @Binding var borderPercentage: Double
+    @Binding var transparencyPercentage: Double
     let screenSize: CGSize
     
     private var maxScreenDimension: CGFloat {
@@ -51,7 +56,7 @@ struct RingView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             Circle()
-                .strokeBorder(Color.white, lineWidth: borderWidth)
+                .strokeBorder(Color.white.opacity(1 - transparencyPercentage / 100), lineWidth: borderWidth)
                 .frame(width: diameter, height: diameter)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
