@@ -81,14 +81,6 @@ struct MenuBarView: View {
             Toggle("Show Ring", isOn: $windowManager.isVisible)
                 .padding(.vertical, 4)
             
-            Button("Resize Windows to Fit") {
-                    let diameter = max(NSScreen.main?.frame.width ?? 0,
-                                     NSScreen.main?.frame.height ?? 0) *
-                                 (windowManager.radiusPercentage / 100.0)
-                    WindowResizer.resizeWindowsToFitRing(ringDiameter: diameter)
-            }
-            .padding(.vertical, 4)
-            
             Divider()
                 .padding(.vertical, 4)
             
