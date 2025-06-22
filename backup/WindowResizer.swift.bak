@@ -1,0 +1,476 @@
+import AppKit
+import Foundation
+
+class WindowResizer {
+    // Store our app's process ID to ensure we never resize our own windows
+    private static let ourProcessID = ProcessInfo.processInfo.processIdentifier
+    // Error code for accessibility permissions not granted
+    private static let kAXErrorPermissionDenied: Int = -25204
+    
+    // Try to resize windows directly without checking permissions first
+    static func resizeWindowsToFitRing(ringDiameter: CGFloat) {
+        // Check if we have accessibility permissions
+        if !AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary) {
+            showPermissionsAlert()
+            return
+        }
+        
+        // Test accessibility with a simple operation first
+        if !testAccessibilityPermissions() {
+            showPermissionsAlert()
+            return
+        }
+        
+        // Try to resize windows using both methods
+        let resizedAny = resizeWindowsUsingCGWindowList(ringDiameter: ringDiameter) || 
+                         resizeWindowsUsingRunningApplications(ringDiameter: ringDiameter)
+        
+        // Show appropriate message based on result
+        if resizedAny {
+            showSuccessAlert()
+        } else {
+            showNoWindowsAlert()
+        }
+    }
+    
+    // Test if we can actually use accessibility APIs by trying a simple operation
+    private static func testAccessibilityPermissions() -> Bool {
+        // Try to get any frontmost app's windows as a test
+        if let frontApp = NSWorkspace.shared.frontmostApplication {
+            let appRef = AXUIElementCreateApplication(frontApp.processIdentifier)
+            var value: CFTypeRef?
+            let result = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+            
+            // If we get a permission error, we need to prompt
+            if result.rawValue == kAXErrorPermissionDenied {
+                print("Accessibility test failed with permission error: \(result.rawValue)")
+                return false
+            }
+        }
+        return true
+    }
+    
+    // Show permissions alert and guide user to System Settings
+    private static func showPermissionsAlert() {
+        let alert = NSAlert()
+        alert.messageText = "Accessibility Permissions Required"
+        alert.informativeText = "To resize windows, this app needs Accessibility permissions. Please follow these steps:\n\n1. Click 'Open System Settings' below\n2. In Privacy & Security → Accessibility, find 'Ring Light' in the list\n3. If 'Ring Light' is already checked, uncheck it first\n4. Check the box next to 'Ring Light' again\n5. Completely quit this app (Cmd+Q)\n6. Restart the app\n\nError -25204 indicates that accessibility permissions need to be refreshed.\n\nYou can also try the 'Fix Permissions' button which will attempt to repair the permissions."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Open System Settings")
+        alert.addButton(withTitle: "Fix Permissions")
+        alert.addButton(withTitle: "Cancel")
+        
+        let result = alert.runModal()
+        if result == .alertFirstButtonReturn {
+            // Open System Settings directly to Accessibility
+            let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!
+            NSWorkspace.shared.open(url)
+        } else if result == .alertSecondButtonReturn {
+            // Try to fix permissions
+            tryFixPermissions()
+        }
+    }
+    
+    // Try to fix permissions by resetting and requesting again
+    private static func tryFixPermissions() {
+        // First, try a terminal command to reset the accessibility database
+        let task = Process()
+        task.launchPath = "/usr/bin/tccutil"
+        task.arguments = ["reset", "Accessibility", "Light-Co.Ring-Light"]
+        
+        do {
+            try task.run()
+            task.waitUntilExit()
+            
+            // Now prompt for permissions again
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                let prompt = NSAlert()
+                prompt.messageText = "Permissions Reset"
+                prompt.informativeText = "Accessibility permissions have been reset. Please try the 'Resize Windows to Fit' button again."
+                prompt.alertStyle = .informational
+                prompt.addButton(withTitle: "OK")
+                prompt.runModal()
+            }
+        } catch {
+            print("Failed to reset permissions: \(error)")
+            
+            // Fallback to manual method
+            let fallbackAlert = NSAlert()
+            fallbackAlert.messageText = "Manual Reset Required"
+            fallbackAlert.informativeText = "Please try removing and re-adding the app in System Settings manually."
+            fallbackAlert.alertStyle = .warning
+            fallbackAlert.addButton(withTitle: "OK")
+            fallbackAlert.runModal()
+        }
+    }
+    
+    // Show alert when no windows could be resized
+    private static func showNoWindowsAlert() {
+        let alert = NSAlert()
+        alert.messageText = "No Windows Resized"
+        alert.informativeText = "No suitable windows were found to resize. Make sure you have active windows open and try again."
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+    
+    // Show success alert when windows were resized
+    private static func showSuccessAlert() {
+        let alert = NSAlert()
+        alert.messageText = "Windows Resized"
+        alert.informativeText = "Windows have been resized to fit within the ring light."
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+    
+    // Method 1: Resize windows using CGWindowList
+    private static func resizeWindowsUsingCGWindowList(ringDiameter: CGFloat) -> Bool {
+        print("\n==== DETAILED WINDOW DEBUGGING ====")
+        print("Method 1: Resizing using CGWindowList with diameter: \(ringDiameter)")
+        
+        // Calculate maximum window size (90% of ring diameter)
+        let maxWindowSize = CGSize(width: ringDiameter * 0.9, height: ringDiameter * 0.9)
+        var resizedAnyWindow = false
+        
+        // Print debug header
+        print("\nAll visible windows on current space:")
+        
+        // Get frontmost window info to identify current space
+        var currentSpaceID: CGWindowID = kCGNullWindowID
+        if let activeSpace = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]],
+           let frontmostApp = activeSpace.first(where: { ($0[kCGWindowOwnerPID as String] as? pid_t) != nil && 
+                                                   ($0[kCGWindowLayer as String] as? Int) == 0 && 
+                                                   ($0[kCGWindowAlpha as String] as? Float ?? 0) > 0.9 }) {
+            currentSpaceID = frontmostApp[kCGWindowNumber as String] as? CGWindowID ?? kCGNullWindowID
+            print("Found current space ID: \(currentSpaceID)")
+        }
+        
+        // Get only windows on the current space
+        let filteredOptions = CGWindowListOption(arrayLiteral: .optionOnScreenOnly, .excludeDesktopElements)
+        let windowList = CGWindowListCopyWindowInfo(filteredOptions, currentSpaceID) as? [[String: Any]] ?? []
+        print("Found \(windowList.count) windows on current space")
+        
+        // Process each window
+        for windowDict in windowList {
+            // Extract window information
+            guard let bounds = windowDict[kCGWindowBounds as String] as? [String: Any],
+                  let ownerName = windowDict[kCGWindowOwnerName as String] as? String,
+                  let pid = windowDict[kCGWindowOwnerPID as String] as? pid_t else {
+                continue
+            }
+            
+            // Get window details
+            let windowName = windowDict[kCGWindowName as String] as? String ?? ""
+            let layer = windowDict[kCGWindowLayer as String] as? Int ?? -1
+            
+            print("\nProcessing window: \(ownerName) - \(windowName) (PID: \(pid))")
+            
+            // First and most important check - skip our own process by PID
+            if pid == ourProcessID {
+                print("  SKIPPED: Our own app by PID")
+                continue
+            }
+            
+            // Skip only essential system windows and our app
+            if ownerName.contains("Webcam") || 
+               ownerName.contains("Ring Light") ||
+               ownerName == "Dock" || 
+               ownerName == "SystemUIServer" ||
+               ownerName == "Window Server" {
+                print("  SKIPPED: System window or app name match")
+                continue
+            }
+            
+            // Log the layer but don't filter by it
+            print("  Window layer: \(layer)")
+            
+            // Only skip minimized or hidden windows
+            let isOnScreen = windowDict[kCGWindowIsOnscreen as String] as? Bool ?? false
+            if !isOnScreen {
+                print("  SKIPPED: Window is not on screen")
+                continue
+            }
+            
+            // Get window dimensions
+            let currentX = (bounds["X"] as? CGFloat) ?? 0
+            let currentY = (bounds["Y"] as? CGFloat) ?? 0
+            let currentWidth = (bounds["Width"] as? CGFloat) ?? 0
+            let currentHeight = (bounds["Height"] as? CGFloat) ?? 0
+            
+            print("Window: \(ownerName), Size: \(currentWidth)x\(currentHeight)")
+            
+            // Skip windows that are too small
+            if currentWidth < 50 || currentHeight < 50 {
+                print("  SKIPPED: Window too small (\(currentWidth)x\(currentHeight))")
+                continue
+            }
+            
+            print("  ATTEMPTING to resize window: \(ownerName) - \(windowName) (\(currentWidth)x\(currentHeight))")
+            
+            if resizeWindow(pid: pid, appName: ownerName, currentX: currentX, currentY: currentY, 
+                           currentWidth: currentWidth, currentHeight: currentHeight, maxWindowSize: maxWindowSize) {
+                resizedAnyWindow = true
+            }
+        }
+        
+        return resizedAnyWindow
+    }
+    
+    // Method 2: Resize windows using NSRunningApplication
+    private static func resizeWindowsUsingRunningApplications(ringDiameter: CGFloat) -> Bool {
+        print("Method 2: Resizing using NSRunningApplication with diameter: \(ringDiameter)")
+        
+        // Calculate maximum window size (90% of ring diameter)
+        let maxWindowSize = CGSize(width: ringDiameter * 0.9, height: ringDiameter * 0.9)
+        var resizedAnyWindow = false
+        
+        // Get frontmost window info to identify current space
+        var currentSpaceID: CGWindowID = kCGNullWindowID
+        if let activeSpace = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]],
+           let frontmostApp = activeSpace.first(where: { ($0[kCGWindowOwnerPID as String] as? pid_t) != nil && 
+                                                   ($0[kCGWindowLayer as String] as? Int) == 0 && 
+                                                   ($0[kCGWindowAlpha as String] as? Float ?? 0) > 0.9 }) {
+            currentSpaceID = frontmostApp[kCGWindowNumber as String] as? CGWindowID ?? kCGNullWindowID
+        }
+        print("Current space ID: \(currentSpaceID)")
+        
+        // Get all windows on the current space to check against
+        let currentSpaceWindows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], 
+                                                           currentSpaceID) as? [[String: Any]] ?? []
+        
+        // Extract PIDs of windows on the current space
+        let currentSpacePIDs = Set(currentSpaceWindows.compactMap { $0[kCGWindowOwnerPID as String] as? pid_t })
+        print("Found \(currentSpacePIDs.count) applications on current space")
+        
+        // Get all running applications
+        let runningApps = NSWorkspace.shared.runningApplications
+        
+        print("Found \(runningApps.count) running applications")
+        
+        for app in runningApps {
+            // Skip apps that don't have windows on the current space
+            if !currentSpacePIDs.contains(app.processIdentifier) {
+                print("  Skipping app not on current space: \(app.localizedName ?? "Unknown")")
+                continue
+            }
+            
+            // First and most important check - skip our own process by PID
+            if app.processIdentifier == ourProcessID {
+                print("  Skipping our own app by PID")
+                continue
+            }
+            
+            // Additional checks to be extra safe
+            let appName = app.localizedName ?? ""
+            if appName.contains("Webcam") || 
+               appName.contains("Ring") || 
+               appName.contains("Light") ||
+               app.activationPolicy != .regular {
+                print("  Skipping system or utility app: \(appName)")
+                continue
+            }
+            
+            print("App: \(app.localizedName ?? "Unknown"), PID: \(app.processIdentifier)")
+            
+            // Try to resize this app's windows
+            let appRef = AXUIElementCreateApplication(app.processIdentifier)
+            var windowsRef: CFTypeRef?
+            let windowsResult = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &windowsRef)
+            
+            if windowsResult != .success {
+                print("  Failed to get windows for \(app.localizedName ?? "Unknown"): Error \(windowsResult)")
+                continue
+            }
+            
+            guard let windowsArray = windowsRef as? [AXUIElement], !windowsArray.isEmpty else {
+                print("  No accessible windows found for \(app.localizedName ?? "Unknown")")
+                continue
+            }
+            
+            print("  Found \(windowsArray.count) accessible windows for \(app.localizedName ?? "Unknown")")
+            
+            // Try to resize each window
+            for windowRef in windowsArray {
+                // Get current position and size
+                var positionRef: CFTypeRef?
+                var sizeRef: CFTypeRef?
+                
+                guard AXUIElementCopyAttributeValue(windowRef, kAXPositionAttribute as CFString, &positionRef) == .success,
+                      AXUIElementCopyAttributeValue(windowRef, kAXSizeAttribute as CFString, &sizeRef) == .success else {
+                    continue
+                }
+                
+                var position = CGPoint.zero
+                var size = CGSize.zero
+                
+                guard AXValueGetValue(positionRef as! AXValue, .cgPoint, &position),
+                      AXValueGetValue(sizeRef as! AXValue, .cgSize, &size) else {
+                    continue
+                }
+                
+                // Skip windows that are too small
+                if size.width < 50 || size.height < 50 {
+                    continue
+                }
+                
+                // Calculate scaling factors
+                let widthScale = maxWindowSize.width / size.width
+                let heightScale = maxWindowSize.height / size.height
+                let scale = min(widthScale, heightScale, 1) // Don't make windows larger
+                
+                // Calculate new dimensions
+                let newWidth = size.width * scale
+                let newHeight = size.height * scale
+                
+                // Calculate new position to keep window centered
+                let newX = position.x + (size.width - newWidth) / 2
+                let newY = position.y + (size.height - newHeight) / 2
+                
+                // Try to set new size
+                var newSize = CGSize(width: newWidth, height: newHeight)
+                if let axSize = AXValueCreate(.cgSize, &newSize) {
+                    let sizeResult = AXUIElementSetAttributeValue(windowRef, kAXSizeAttribute as CFString, axSize)
+                    if sizeResult == .success {
+                        print("  Successfully resized window for \(app.localizedName ?? "Unknown") to \(newWidth)x\(newHeight)")
+                        resizedAnyWindow = true
+                    }
+                }
+                
+                // Try to set new position
+                var newPosition = CGPoint(x: newX, y: newY)
+                if let axPosition = AXValueCreate(.cgPoint, &newPosition) {
+                    AXUIElementSetAttributeValue(windowRef, kAXPositionAttribute as CFString, axPosition)
+                }
+            }
+        }
+        
+        return resizedAnyWindow
+    }
+    
+    // Helper method to resize a specific window
+    private static func resizeWindow(pid: pid_t, appName: String, currentX: CGFloat, currentY: CGFloat, 
+                                    currentWidth: CGFloat, currentHeight: CGFloat, maxWindowSize: CGSize) -> Bool {
+        print("\nAttempting to resize window for app: \(appName) (PID: \(pid))")
+        
+        // Try a different approach - get the app's accessibility element
+        let appRef = AXUIElementCreateApplication(pid)
+        
+        // First check if we can access the app at all
+        var processAttribute: CFTypeRef?
+        let processResult = AXUIElementCopyAttributeValue(appRef, kAXProcessAttribute as CFString, &processAttribute)
+        if processResult != .success {
+            print("  FAILED: Cannot access process for \(appName): Error \(processResult.rawValue)")
+            if processResult.rawValue == kAXErrorPermissionDenied {
+                DispatchQueue.main.async {
+                    showPermissionsAlert()
+                }
+            }
+            return false
+        }
+        
+        // Now try to get the windows
+        var windowsRef: CFTypeRef?
+        let windowsResult = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &windowsRef)
+        
+        if windowsResult != .success {
+            // Check if this is a permissions error
+            if windowsResult.rawValue == kAXErrorPermissionDenied {
+                print("  FAILED: Accessibility permissions needed for \(appName). Error \(windowsResult.rawValue)")
+                // Show permissions alert if this is the first app we encounter with permission issues
+                DispatchQueue.main.async {
+                    showPermissionsAlert()
+                }
+            } else {
+                print("  FAILED: Could not get windows for \(appName): Error \(windowsResult.rawValue)")
+            }
+            return false
+        }
+        
+        guard let windowsArray = windowsRef as? [AXUIElement], !windowsArray.isEmpty else {
+            print("  FAILED: No accessible windows found for \(appName)")
+            return false
+        }
+        
+        print("  Found \(windowsArray.count) accessible windows for \(appName)")
+        
+        var resizedAny = false
+        
+        // Try to resize all windows for this application
+        for windowRef in windowsArray {
+            // Calculate scaling factors
+            let widthScale = maxWindowSize.width / currentWidth
+            let heightScale = maxWindowSize.height / currentHeight
+            let scale = min(widthScale, heightScale, 1) // Don't make windows larger
+            
+            // Calculate new dimensions
+            let newWidth = currentWidth * scale
+            let newHeight = currentHeight * scale
+            
+            // Calculate new position to keep window centered
+            let newX = currentX + (currentWidth - newWidth) / 2
+            let newY = currentY + (currentHeight - newHeight) / 2
+            
+            // Try a different approach - get specific window attributes first to confirm we can access them
+            var currentSizeRef: CFTypeRef?
+            let sizeCheckResult = AXUIElementCopyAttributeValue(windowRef, kAXSizeAttribute as CFString, &currentSizeRef)
+            if sizeCheckResult != .success {
+                print("  FAILED: Cannot access window size attribute: Error \(sizeCheckResult.rawValue)")
+                if sizeCheckResult.rawValue == kAXErrorPermissionDenied {
+                    DispatchQueue.main.async {
+                        showPermissionsAlert()
+                    }
+                }
+                continue // Try next window
+            }
+            
+            // Try to set position first
+            var positionValue = CGPoint(x: newX, y: newY)
+            if let axPosition = AXValueCreate(.cgPoint, &positionValue) {
+                // Set position
+                let posResult = AXUIElementSetAttributeValue(windowRef, kAXPositionAttribute as CFString, axPosition)
+                
+                // Check for permission errors when setting position
+                if posResult.rawValue == kAXErrorPermissionDenied {
+                    print("  FAILED: Accessibility permissions needed for setting position. Error \(posResult.rawValue)")
+                    DispatchQueue.main.async {
+                        showPermissionsAlert()
+                    }
+                    continue // Try next window
+                } else if posResult != .success {
+                    print("  Position set failed: \(posResult.rawValue)")
+                    // Continue anyway, try to set size
+                } else {
+                    print("  Position set successfully")
+                }
+                
+                // Wait a tiny bit before setting size
+                usleep(10000) // 10ms delay
+                
+                // Now set size
+                var sizeValue = CGSize(width: newWidth, height: newHeight)
+                if let axSize = AXValueCreate(.cgSize, &sizeValue) {
+                    let sizeResult = AXUIElementSetAttributeValue(windowRef, kAXSizeAttribute as CFString, axSize)
+                    
+                    // Check for permission errors when setting size
+                    if sizeResult.rawValue == kAXErrorPermissionDenied {
+                        print("  FAILED: Accessibility permissions needed for setting size. Error \(sizeResult.rawValue)")
+                        DispatchQueue.main.async {
+                            showPermissionsAlert()
+                        }
+                        continue // Try next window
+                    } else if sizeResult == .success {
+                        print("  SUCCESS: Resized window for \(appName) to \(newWidth)x\(newHeight)")
+                        resizedAny = true
+                    } else {
+                        print("  FAILED: Could not resize window for \(appName): Error \(sizeResult.rawValue)")
+                    }
+                }
+            }
+            
+            // We already set position in the size block
+        }
+        
+        return resizedAny
+    }
+}

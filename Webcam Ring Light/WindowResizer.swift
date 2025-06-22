@@ -1,58 +1,109 @@
 import AppKit
+import Foundation
 
 class WindowResizer {
-    // Check if we have accessibility permissions
-    static func hasAccessibilityPermissions() -> Bool {
-        return AXIsProcessTrusted()
-    }
+    // Store our app's process ID to ensure we never resize our own windows
+    private static let ourProcessID = ProcessInfo.processInfo.processIdentifier
+    // Error code for accessibility permissions not granted
+    private static let kAXErrorPermissionDenied: Int = -25204
     
-    // Request accessibility permissions with a prompt
-    static func requestAccessibilityPermissions() -> Bool {
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
-        return AXIsProcessTrustedWithOptions(options as CFDictionary)
-    }
-    
-    // Show permissions alert and guide user to System Settings
-    static func showPermissionsAlert() {
-        let alert = NSAlert()
-        alert.messageText = "Accessibility Permissions Required"
-        alert.informativeText = "To resize windows, this app needs Accessibility permissions. Please grant them in System Settings → Privacy & Security → Accessibility, then try again."
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "Open System Settings")
-        alert.addButton(withTitle: "Cancel")
-        
-        if alert.runModal() == .alertFirstButtonReturn {
-            // Use the modern URL scheme for macOS
-            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
-                NSWorkspace.shared.open(url)
-            }
-        }
-    }
-    
+    // Try to resize windows directly without checking permissions first
     static func resizeWindowsToFitRing(ringDiameter: CGFloat) {
-        // First check if we have permissions
-        if !hasAccessibilityPermissions() {
+        // Check if we have accessibility permissions with prompt option
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
+        if !AXIsProcessTrustedWithOptions(options as CFDictionary) {
             showPermissionsAlert()
             return
         }
         
-        // Get screen and maximum window size
-        guard let screen = NSScreen.main else { return }
-        let maxWindowSize = CGSize(width: ringDiameter * 0.9, height: ringDiameter * 0.9) // 90% of ring size
+        // Test accessibility with a simple operation first
+        if !testAccessibilityPermissions() {
+            showPermissionsAlert()
+            return
+        }
         
-        // Track if we successfully resized any windows
-        var resizedAnyWindow = false
+        // Try to resize windows using both methods
+        let resizedAny = resizeWindowsUsingCGWindowList(ringDiameter: ringDiameter) || 
+                         resizeWindowsUsingRunningApplications(ringDiameter: ringDiameter)
         
-        // Get all visible windows
-        let options = CGWindowListOption(arrayLiteral: .optionOnScreenOnly, .excludeDesktopElements)
-        let windowList = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] ?? []
+        // Show appropriate message based on result
+        if resizedAny {
+            showSuccessAlert()
+        } else {
+            showNoWindowsAlert()
+        }
+    }
+    
+    // Test if we can actually use accessibility APIs by trying a simple operation
+    private static func testAccessibilityPermissions() -> Bool {
+        // Try to get any frontmost app's windows as a test
+        if let frontApp = NSWorkspace.shared.frontmostApplication {
+            let appRef = AXUIElementCreateApplication(frontApp.processIdentifier)
+            var value: CFTypeRef?
+            let result = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+            
+            // If we get a permission error, we need to prompt
+            if result.rawValue == kAXErrorPermissionDenied {
+                print("Accessibility test failed with permission error: \(result.rawValue)")
+                return false
+            }
+        }
+        return true
+    }
+    
+    // Show permissions alert and guide user to System Settings
+    private static func showPermissionsAlert() {
+        let alert = NSAlert()
+        alert.messageText = "Accessibility Permissions Required"
+        alert.informativeText = "To resize windows, this app needs Accessibility permissions. Please follow these steps:\n\n1. Click 'Open System Settings' below\n2. In Privacy & Security → Accessibility, find 'Ring Light' in the list\n3. If 'Ring Light' is already checked, uncheck it first\n4. Check the box next to 'Ring Light' again\n5. Completely quit this app (Cmd+Q)\n6. Restart the app\n\nError -25204 indicates that accessibility permissions need to be refreshed."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Open System Settings")
+        alert.addButton(withTitle: "Fix Permissions")
+        alert.addButton(withTitle: "Cancel")
         
-        for windowDict in windowList {
-            // Extract window information
-            guard let bounds = windowDict[kCGWindowBounds as String] as? [String: Any],
-                  let ownerName = windowDict[kCGWindowOwnerName as String] as? String,
-                  let windowID = windowDict[kCGWindowNumber as String] as? Int,
-                  let pid = windowDict[kCGWindowOwnerPID as String] as? pid_t else {
+        let result = alert.runModal()
+        if result == .alertFirstButtonReturn {
+            // Open System Settings directly to Accessibility
+            let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!
+            NSWorkspace.shared.open(url)
+        } else if result == .alertSecondButtonReturn {
+            // Try to fix permissions
+            tryFixPermissions()
+        }
+    }
+    
+    // Try to fix permissions by resetting and requesting again
+    private static func tryFixPermissions() {
+        // First, try a terminal command to reset the accessibility database
+        let task = Process()
+        task.launchPath = "/usr/bin/tccutil"
+        task.arguments = ["reset", "Accessibility", "Light-Co.Ring-Light"]
+        
+        do {
+            try task.run()
+            task.waitUntilExit()
+            
+            // Now prompt for permissions again
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                let prompt = NSAlert()
+                prompt.messageText = "Permissions Reset"
+                prompt.informativeText = "Accessibility permissions have been reset. Please try the 'Resize Windows to Fit' button again."
+                prompt.alertStyle = .informational
+                prompt.addButton(withTitle: "OK")
+                prompt.runModal()
+            }
+        } catch {
+            print("Failed to reset permissions: \(error)")
+            
+            // Fallback to manual method
+            let fallbackAlert = NSAlert()
+            fallbackAlert.messageText = "Manual Reset Required"
+            fallbackAlert.informativeText = "Please try removing and re-adding the app in System Settings manually."
+            fallbackAlert.alertStyle = .warning
+            fallbackAlert.addButton(withTitle: "OK")
+            fallbackAlert.runModal()
+        }
+    }
                 continue
             }
             
